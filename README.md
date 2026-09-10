@@ -1,5 +1,3 @@
 # Readme
 
-;lzskdjf;lsadjfl;ksdfj;lk
-
-hellllllllllllo world
+[遊戲規格書](./遊戲規格書.md)
