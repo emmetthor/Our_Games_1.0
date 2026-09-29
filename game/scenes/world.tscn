@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dyuqtisg8d2t3"]
+
+[ext_resource type="Script" uid="uid://bc2niqopgqwd4" path="res://scenes/color_rect.gd" id="1_nnsk1"]
+[ext_resource type="Script" uid="uid://cn4h4e0ls76w7" path="res://scenes/grid_manager.gd" id="2_rwgxs"]
+
+[node name="World" type="Node2D" unique_id=1311060387]
+
+[node name="BuildPreview" type="ColorRect" parent="." unique_id=128812729 node_paths=PackedStringArray("grid_manager")]
+offset_left = -21.0
+offset_top = -20.0
+offset_right = 19.0
+offset_bottom = 20.0
+script = ExtResource("1_nnsk1")
+grid_manager = NodePath("../GridManager")
+
+[node name="GridManager" type="Node" parent="." unique_id=1063489791]
+script = ExtResource("2_rwgxs")
