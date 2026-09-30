@@ -3,17 +3,13 @@ extends Node
 
 const GRID_SIZE = 32;
 
+@export var ground : TileMapLayer
+
 func world_to_grid(world_pos: Vector2) -> Vector2i:
-	return Vector2i(
-		floor(world_pos.x / GRID_SIZE),
-		floor(world_pos.y / GRID_SIZE)
-	)
+	return ground.local_to_map(ground.to_local(world_pos))
 
 func grid_to_world(cell: Vector2i) -> Vector2:
-	return Vector2(
-		cell.x * GRID_SIZE,
-		cell.y * GRID_SIZE
-	)
+	return ground.to_global(ground.map_to_local(cell))
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

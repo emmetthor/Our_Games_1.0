@@ -13,4 +13,4 @@ func _process(delta: float) -> void:
 	var cell = grid_manager.world_to_grid(mouse_world)
 	var snapped_pos = grid_manager.grid_to_world(cell)
 
-	position = snapped_pos
+	position = snapped_pos - size / 2
