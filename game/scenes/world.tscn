@@ -18,18 +18,20 @@ ground = NodePath("../Ground")
 [node name="Ground" type="TileMapLayer" parent="." unique_id=1559135083]
 tile_set = SubResource("TileSet_t1otr")
 
-[node name="BuildManager" type="Node2D" parent="." unique_id=1226713082 node_paths=PackedStringArray("grid_manager", "preview")]
+[node name="BuildManager" type="Node2D" parent="." unique_id=1226713082 node_paths=PackedStringArray("grid_manager", "preview", "preview_square")]
 position = Vector2(1, 0)
 script = ExtResource("3_4wyf3")
 grid_manager = NodePath("../GridManager")
 building_scene = ExtResource("3_71j4m")
 preview = NodePath("BuildPreview")
+preview_square = NodePath("BuildPreview/ColorRect")
 
 [node name="BuildPreview" type="Node2D" parent="BuildManager" unique_id=1080821260]
 visible = false
 script = ExtResource("3_k0juu")
 
 [node name="ColorRect" type="ColorRect" parent="BuildManager/BuildPreview" unique_id=1602621584]
+z_index = 1
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
