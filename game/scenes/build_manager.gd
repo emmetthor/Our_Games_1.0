@@ -8,6 +8,9 @@ extends Node2D
 var current_cell: Vector2i
 
 var build_mode := false
+var is_drag_building := false
+const INIT_BUILD_CELL = Vector2i(-999999, -999999)
+var last_build_cell = INIT_BUILD_CELL
 
 func _ready() -> void:
 	pass
@@ -27,6 +30,10 @@ func _process(_delta: float) -> void:
 	else:
 		preview_square.color = Color(0.2, 1.0, 0.2, 0.5)
 
+	if is_drag_building and last_build_cell != current_cell:
+		place_building()
+		last_build_cell = current_cell
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("build_mode") and build_mode == false:
@@ -41,7 +48,12 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("build_place"):
 		print("start placing")
+		is_drag_building = true;
+		last_build_cell = INIT_BUILD_CELL
 		place_building()
+
+	if event.is_action_released("build_place"):
+		is_drag_building = false;
 
 	if event.is_action_pressed("remove_building"):
 		print("start removing")
@@ -63,6 +75,9 @@ func cancel_build_mode() -> void:
 
 
 func place_building() -> void:
+	if (current_cell == last_build_cell):
+		return
+
 	if grid_manager.is_occupied(current_cell):
 		print("you can't build here")
 		return
