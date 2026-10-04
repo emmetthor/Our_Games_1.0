@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dyuqtisg8d2t3"]
 
-[ext_resource type="Script" uid="uid://bc2niqopgqwd4" path="res://scenes/color_rect.gd" id="1_nnsk1"]
 [ext_resource type="Script" uid="uid://cn4h4e0ls76w7" path="res://scenes/grid_manager.gd" id="2_rwgxs"]
 [ext_resource type="Script" uid="uid://nmi6785wo2o6" path="res://scenes/build_manager.gd" id="3_4wyf3"]
 [ext_resource type="PackedScene" uid="uid://dv21rkvydwpyv" path="res://buildings/test_buildings.tscn" id="3_71j4m"]
 [ext_resource type="Script" uid="uid://cai1lixvq7c8b" path="res://scenes/build_preview.gd" id="3_k0juu"]
+[ext_resource type="Texture2D" uid="uid://cq35sb7l8awo2" path="res://assets/preview_square.png" id="5_71j4m"]
 
 [sub_resource type="TileSet" id="TileSet_t1otr"]
 tile_size = Vector2i(32, 32)
@@ -19,20 +19,18 @@ ground = NodePath("../Ground")
 tile_set = SubResource("TileSet_t1otr")
 
 [node name="BuildManager" type="Node2D" parent="." unique_id=1226713082 node_paths=PackedStringArray("grid_manager", "preview", "preview_square")]
+z_index = 1
 position = Vector2(1, 0)
 script = ExtResource("3_4wyf3")
 grid_manager = NodePath("../GridManager")
 building_scene = ExtResource("3_71j4m")
 preview = NodePath("BuildPreview")
-preview_square = NodePath("BuildPreview/ColorRect")
+preview_square = NodePath("BuildPreview/PreviewSquare")
 
 [node name="BuildPreview" type="Node2D" parent="BuildManager" unique_id=1080821260]
 visible = false
 script = ExtResource("3_k0juu")
 
-[node name="ColorRect" type="ColorRect" parent="BuildManager/BuildPreview" unique_id=1602621584]
-z_index = 1
-offset_right = 32.0
-offset_bottom = 32.0
-mouse_filter = 2
-script = ExtResource("1_nnsk1")
+[node name="PreviewSquare" type="Sprite2D" parent="BuildManager/BuildPreview" unique_id=806212048]
+texture_filter = 1
+texture = ExtResource("5_71j4m")

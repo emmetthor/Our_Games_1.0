@@ -1,8 +1,11 @@
 [gd_scene format=3 uid="uid://dv21rkvydwpyv"]
 
+[ext_resource type="Texture2D" uid="uid://nqjldjybaasn" path="res://assets/drill.png" id="1_biaf1"]
+[ext_resource type="Script" uid="uid://cpv35817cr8wv" path="res://buildings/drill.gd" id="2_rrfm3"]
+
 [node name="TestBuildings" type="Node2D" unique_id=27084834]
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=53641903]
-offset_right = 32.0
-offset_bottom = 32.0
-mouse_filter = 2
+[node name="Drill" type="Sprite2D" parent="." unique_id=1933132906]
+texture_filter = 1
+texture = ExtResource("1_biaf1")
+script = ExtResource("2_rrfm3")

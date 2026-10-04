@@ -3,7 +3,7 @@ extends Node2D
 @export var grid_manager: GridManager
 @export var building_scene: PackedScene
 @export var preview: Node2D
-@export var preview_square: ColorRect
+@export var preview_square: Sprite2D
 
 var current_cell: Vector2i
 
@@ -26,9 +26,9 @@ func _process(_delta: float) -> void:
 	preview.global_position = world_pos
 
 	if grid_manager.is_occupied(current_cell):
-		preview_square.color = Color(1.0, 0.2, 0.2, 0.5)
+		preview_square.modulate = Color(1.0, 0.2, 0.2, 0.5)
 	else:
-		preview_square.color = Color(0.2, 1.0, 0.2, 0.5)
+		preview_square.modulate = Color(0.2, 1.0, 0.2, 0.5)
 
 	if is_drag_building and last_build_cell != current_cell:
 		place_building()
