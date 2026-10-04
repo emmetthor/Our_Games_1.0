@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dv21rkvydwpyv"]
+
+[node name="TestBuildings" type="Node2D" unique_id=27084834]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=53641903]
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
