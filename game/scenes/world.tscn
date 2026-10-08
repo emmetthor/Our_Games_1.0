@@ -2,8 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cn4h4e0ls76w7" path="res://scenes/grid_manager.gd" id="2_rwgxs"]
 [ext_resource type="Script" uid="uid://nmi6785wo2o6" path="res://scenes/build_manager.gd" id="3_4wyf3"]
-[ext_resource type="PackedScene" uid="uid://dv21rkvydwpyv" path="res://buildings/test_buildings.tscn" id="3_71j4m"]
 [ext_resource type="Script" uid="uid://cai1lixvq7c8b" path="res://scenes/build_preview.gd" id="3_k0juu"]
+[ext_resource type="Script" uid="uid://n5mww6f1tdwn" path="res://buildings/building_data.gd" id="3_qfnet"]
+[ext_resource type="Resource" uid="uid://c2ppos2etbtpy" path="res://buildings/drill.tres" id="4_i7141"]
 [ext_resource type="Texture2D" uid="uid://cq35sb7l8awo2" path="res://assets/preview_square.png" id="5_71j4m"]
 
 [sub_resource type="TileSet" id="TileSet_t1otr"]
@@ -23,7 +24,7 @@ z_index = 1
 position = Vector2(1, 0)
 script = ExtResource("3_4wyf3")
 grid_manager = NodePath("../GridManager")
-building_scene = ExtResource("3_71j4m")
+available_building = Array[ExtResource("3_qfnet")]([ExtResource("4_i7141")])
 preview = NodePath("BuildPreview")
 preview_square = NodePath("BuildPreview/PreviewSquare")
 

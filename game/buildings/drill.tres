@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://c2ppos2etbtpy"]
+
+[ext_resource type="Script" uid="uid://n5mww6f1tdwn" path="res://buildings/building_data.gd" id="1_l3bok"]
+[ext_resource type="PackedScene" uid="uid://du02nuroila03" path="res://buildings/drill.tscn" id="1_q2kld"]
+
+[resource]
+script = ExtResource("1_l3bok")
+building_name = "TestDrill"
+building_scene = ExtResource("1_q2kld")

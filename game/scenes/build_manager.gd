@@ -1,11 +1,12 @@
 extends Node2D
 
 @export var grid_manager: GridManager
-@export var building_scene: PackedScene
+@export var available_building: Array[BuildingData]
 @export var preview: Node2D
 @export var preview_square: Sprite2D
 
 var current_cell: Vector2i
+var selected_building: BuildingData
 
 var build_mode := false
 var is_drag_building := false
@@ -13,6 +14,7 @@ const INIT_BUILD_CELL = Vector2i(-999999, -999999)
 var last_build_cell = INIT_BUILD_CELL
 
 func _ready() -> void:
+	select_building(0)
 	pass
 
 func _process(_delta: float) -> void:
@@ -72,7 +74,12 @@ func start_build_mode() -> void:
 func cancel_build_mode() -> void:
 	build_mode = false
 	preview.visible = false
+	
+func select_building(index: int) -> void:
+	if index < 0 or index >= available_building.size():
+		return
 
+	selected_building = available_building[index]
 
 func place_building() -> void:
 	if (current_cell == last_build_cell):
@@ -82,7 +89,7 @@ func place_building() -> void:
 		print("you can't build here")
 		return
 
-	var building := building_scene.instantiate()
+	var building := selected_building.building_scene.instantiate()
 
 	grid_manager.occupy(current_cell, building)
 
