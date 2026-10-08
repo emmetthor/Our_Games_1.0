@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:015fc0978f797ce5ca0e1b70a8392273822ae06f0a2b78f31f44f2d2b5271f70
-size 481
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://du0dqhdaedr3i"
+path="res://.godot/imported/正常.wav-e71dd28aa9086576543936e461a762d4.sample"
+
+[deps]
+
+source_file="res://music/正常.wav"
+dest_files=["res://.godot/imported/正常.wav-e71dd28aa9086576543936e461a762d4.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6e6e6615dcb23e40a8263d6705d32fda1590937c28eb8186c1e65ce5d26878fc
-size 482
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://d2youvw7f3onk"
+path="res://.godot/imported/battle.wav-2692154308faac4b63592eb36e777af9.sample"
+
+[deps]
+
+source_file="res://music/battle.wav"
+dest_files=["res://.godot/imported/battle.wav-2692154308faac4b63592eb36e777af9.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

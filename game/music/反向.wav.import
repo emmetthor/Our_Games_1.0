@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:85508b550983c4549634641200ba645d1c38e2a02873691f59d1259580fbd467
-size 482
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c3yt1nb40wvbr"
+path="res://.godot/imported/反向.wav-7c4c313beb7dbac71d6ff59a42f1af10.sample"
+
+[deps]
+
+source_file="res://music/反向.wav"
+dest_files=["res://.godot/imported/反向.wav-7c4c313beb7dbac71d6ff59a42f1af10.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
