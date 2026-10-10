@@ -5,10 +5,10 @@ title: ""
 labels: documentation
 ---
 
-## Description
+## 修改內容
 
 <!-- 說明需要新增或修改的內容及原因 -->
 
-## Related Documents
+## 有關文件
 
 <!-- 列出相關文件，例如 docs/遊戲規格書.md -->
