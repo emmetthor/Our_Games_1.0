@@ -1,0 +1,23 @@
+name: Actions Diagnostic
+
+on:
+  push:
+    branches:
+      - 28-pr-agent
+
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print event information
+        run: |
+          echo "GitHub Actions works!"
+          echo "Event: $GITHUB_EVENT_NAME"
+          echo "Ref: $GITHUB_REF"
