@@ -7,7 +7,7 @@ int main() {
   cin >> n;
   vector<int> a;
   for (auto &i : a)
-    cin >> i;
+    cin >> a;
 
   cout << a[3];
 }
