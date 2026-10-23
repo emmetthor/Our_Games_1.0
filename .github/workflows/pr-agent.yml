@@ -1,6 +1,9 @@
 name: PR Agent
 
 on:
+  pull_request:
+    types: [ready_for_review]
+
   issue_comment:
     types: [created]
 
@@ -30,6 +33,7 @@ jobs:
 
           GOOGLE_AI_STUDIO.GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-          github_action_config.auto_review: "false"
+          github_action_config.auto_review: "true"
           github_action_config.auto_describe: "false"
           github_action_config.auto_improve: "false"
+          github_action_config.pr_actions: '["ready_for_review"]'
