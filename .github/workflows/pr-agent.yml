@@ -1,9 +1,6 @@
-name: PR Agent Review
+name: PR Agent
 
 on:
-  pull_request:
-    types: [opened, reopened, synchronize, ready_for_review]
-
   issue_comment:
     types: [created]
 
@@ -13,16 +10,17 @@ permissions:
   pull-requests: write
 
 jobs:
-  review:
+  pr_agent:
     if: >-
+      github.event.issue.pull_request != null &&
       github.event.sender.type != 'Bot' &&
-      (github.event_name == 'pull_request' ||
-       github.event.issue.pull_request != null)
+      contains(fromJSON('["/review", "/describe", "/improve", "/ask"]'),
+        split(github.event.comment.body, ' ')[0])
 
     runs-on: ubuntu-latest
 
     steps:
-      - name: AI Review
+      - name: PR Agent
         uses: the-pr-agent/pr-agent@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -32,10 +30,6 @@ jobs:
 
           GOOGLE_AI_STUDIO.GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-          config.response_language: "zh-TW"
-
-          github_action_config.auto_review: "true"
+          github_action_config.auto_review: "false"
           github_action_config.auto_describe: "false"
           github_action_config.auto_improve: "false"
-
-          github_action_config.pr_actions: '["opened", "reopened", "ready_for_review", "synchronize"]'
