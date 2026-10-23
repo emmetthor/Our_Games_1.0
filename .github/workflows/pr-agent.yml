@@ -2,7 +2,10 @@ name: PR Agent Review
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
+    types: [opened, reopened, synchronize, ready_for_review]
+
+  issue_comment:
+    types: [created]
 
 permissions:
   contents: read
@@ -11,6 +14,11 @@ permissions:
 
 jobs:
   review:
+    if: >-
+      github.event.sender.type != 'Bot' &&
+      (github.event_name == 'pull_request' ||
+       github.event.issue.pull_request != null)
+
     runs-on: ubuntu-latest
 
     steps:
@@ -19,12 +27,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          config.model: "gemini/gemini-3.7-flash"
-          config.fallback_models: '["gemini/gemini-3.6-flash"]'
+          config.model: "gemini/gemini-3.6-flash"
+          config.fallback_models: '["gemini/gemini-3.5-flash-lite"]'
 
           GOOGLE_AI_STUDIO.GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+          config.response_language: "zh-TW"
 
           github_action_config.auto_review: "true"
           github_action_config.auto_describe: "false"
           github_action_config.auto_improve: "false"
+
           github_action_config.pr_actions: '["opened", "reopened", "ready_for_review", "synchronize"]'
