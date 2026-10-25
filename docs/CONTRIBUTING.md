@@ -70,7 +70,7 @@ Commit 應清楚描述修改內容。
 6. 根據 Review 意見修改。
 7. 通過審查後合併至 main。
 
-## 6.合併規則
+## 合併規則
 
 - PR 應通過基本功能測試。
 - PR 原則上需要至少一位組員審查。
@@ -78,8 +78,22 @@ Commit 應清楚描述修改內容。
 - Merge 後刪除開發分支。
 - 完成的 Issue 應關閉。
 
-## 7. Godot 特殊規則
+## Godot 特殊規則
 
 - 不提交 Godot 自動產生且應被忽略的快取檔案。
 - 新增素材時確認授權與來源（如果是自己畫那就是電神）。
 - 大型資源依專案 Git LFS 規範管理。
+
+## PR Agent 使用
+
+- PR 從 Draft 轉換成一般 PR 時，會自動觸發一次 `/review`。
+- 可在 PR Comment 中使用下列指令：
+
+| 指令 | 功能 |
+| --- | --- |
+| `/review` | 讓 AI review 目前的 PR |
+| `/improve` | 讓 AI 給出改進建議 |
+| `/ask` | 直接詢問 AI |
+| `/describe` | 讓 AI 完成這份 PR 的敘述、標籤等 |
+
+更多資訊請見 [PR Agent](https://docs.pr-agent.ai/usage-guide/)。
