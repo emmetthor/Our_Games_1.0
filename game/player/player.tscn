@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://44wdlk8stn1i"]
+
+[ext_resource type="Script" uid="uid://n6vhp5m7uknt" path="res://player/player.gd" id="1_onrkg"]
+[ext_resource type="Texture2D" uid="uid://0iskf23wv63q" path="res://assets/銅錠物件.png" id="2_i3pqv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hqtel"]
+
+[node name="player" type="Node2D" unique_id=1398472321]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=2068917401]
+motion_mode = 1
+script = ExtResource("1_onrkg")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=701022846]
+texture_filter = 1
+texture = ExtResource("2_i3pqv")
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=17805988]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=2132516570]
+shape = SubResource("RectangleShape2D_hqtel")
