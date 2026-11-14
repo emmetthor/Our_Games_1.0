@@ -1,4 +1,4 @@
-# 部件名稱
+# player
 
 ## 架構
 
@@ -20,24 +20,44 @@
 
 ### 資料流
 
-<!-- 用 mermaid 描述資料如何移動 -->
+```mermaid
+flowchart LR
+    Input["Input Events"] --> get_vector["get_movement_input()"]
+    get_vector --> update["update_movement()"]
+    update --> move_and_slide["move_and_slide()"]
+    move_and_slide --> World["World (KinematicBody2D)"]
+    get_sprint["get_sprint_input()"] --> start_dash["start_dash()"]
+    start_dash --> is_dashing{"is_dashing?"}
+    is_dashing -->|yes| velocity_dash["velocity = dash_direction * dash_speed"]
+    is_dashing -->|no| velocity_normal["velocity = target_velocity + (velocity - target_velocity) * exp(-water_drag * delta)"]
+```
+
+- `get_movement_input()` 每幀讀取當前按鍵狀態，輸出 `[−1, 1]` 範圍的 `Vector2`
+- `update_movement()` 根據是否衝刺計算速度：
+  - 衝刺中：直接設定為 `dash_direction * dash_speed`
+  - 非衝刺：使用水中阻力模型計算速度
+- `move_and_slide()` 將速度應用到物理世界
 
 ### 部件依賴
 
-<!-- 紀錄此部件需要依賴哪些部件 -->
+| 依賴 | 說明 |
+| --- | --- |
+| `Input.get_vector()` | Godot 內建輸入系統，讀取 UI 輸入動作並轉為方向向量 |
+| `Input.is_action_just_pressed()` | 檢測單次按鍵按下事件（用於 dash） |
+| `CharacterBody2D` | 提供 `velocity`、`move_and_slide()` 等移動相關 API |
 
 ## 機制
 
-### 一般移動
+### 機制 1：水中移動
 
 #### 目的
 
-利用 `W`, `A`, `S`, `D` 與方向鍵控制玩家移動。
+利用 `W`, `A`, `S`, `D` 與方向鍵控制玩家在水中的移動，並模擬水的阻力感。
 
 #### 行為
 
-- 按下對應按鍵時，玩家固定在視角中間，而地圖則朝反方向移動。請見[遊戲規則](../遊戲規則.md)。
-- 按下按鍵時，玩家逐漸加速至預期的終端速度；鬆開按鍵時，則逐漸減速至預期速度。
+- 按下按鍵時，玩家逐漸加速至預期終端速度；鬆開按鍵時，則逐漸減速至零。
+- 移動手感模擬水中阻力，具有平滑的加減速過渡。
 
 #### 實做
 
@@ -104,12 +124,11 @@ $$
 
 #### 程式碼
 
-在 `player.md` 中：
-
 ```gdscript
 func update_movement(direction: Vector2, delta: float) -> void:
-    var target_velocity := direction * acceleration / water_drag
+    # ...（省略 dash 邏輯）...
 
+    var target_velocity := direction * acceleration / water_drag
     velocity = target_velocity + (velocity - target_velocity) * exp(-water_drag * delta)
 ```
 
@@ -129,20 +148,108 @@ func update_movement(direction: Vector2, delta: float) -> void:
 
 | 參數 | 意義 |
 | --- | --- |
-| `direction` | 移動方向，由`移動按鍵`決定 |
-| `acceleration` | 加速度 |
-| `water_drag` | 水中模擬阻力 |
+| `acceleration` | 加速度（`@export`，預設 `800.0`） |
+| `water_drag` | 水中模擬阻力（`@export`，預設 `4.0`） |
 
 #### 限制
 
+- 移動方向依賴於 Godot 專案設定中的輸入映射（`move_left`, `move_right`, `move_up`, `move_down`），而非直接綁定特定按鍵。
+- 未處理碰撞後的反饋行為（例如推動、反彈等）。
+
+### 衝刺
+
+#### 目的
+
+提供玩家在短時間內快速移動的能力，增加操作深度與逃生/追擊的策略性。
+
+#### 行為
+
+- 按下 `dash` 按鍵時，玩家朝當前輸入方向以 `dash_speed` 的速度進行衝刺。
+- 衝刺持續 `dash_duration` 時間後自動結束，恢復正常移動。
+- 衝刺結束後進入 `dash_cooldown` 冷卻時間，期間無法再次衝刺。
+- 若無移動輸入（方向為零向量），則不觸發衝刺。
+
+#### 實做
+
+```gdscript
+func update_movement(direction: Vector2, delta: float) -> void:
+    # update dash cooldown
+    cooldown_timer = maxf(cooldown_timer - delta, 0.0)
+
+    if is_dashing:
+        dash_timer -= delta
+        velocity = dash_direction * dash_speed
+
+        if dash_timer <= 0.0:
+            is_dashing = false
+
+    else:
+        if get_sprint_input() and cooldown_timer <= 0.0:
+            start_dash(direction)
+        else:
+            var target_velocity := direction * acceleration / water_drag
+            velocity = target_velocity + (velocity - target_velocity) * exp(-water_drag * delta)
+```
+
+狀態追蹤變數：
+
+| 變數 | 類型 | 意義 |
+| --- | --- | --- |
+| `is_dashing` | `bool` | 是否處於衝刺狀態 |
+| `dash_timer` | `float` | 衝刺剩餘時間 |
+| `cooldown_timer` | `float` | 冷卻倒數計時 |
+| `dash_direction` | `Vector2` | 衝刺方向（已正規化） |
+
+觸發邏輯：
+
+```gdscript
+func start_dash(direction: Vector2) -> void:
+    if direction == Vector2.ZERO:
+        return
+
+    is_dashing = true
+    dash_direction = direction.normalized()
+    dash_timer = dash_duration
+    cooldown_timer = dash_cooldown
+
+    velocity = dash_direction * dash_speed
+```
+
+#### 參數
+
+| 參數 | 意義 | 預設值 |
+| --- | --- | --- |
+| `dash_speed` | 衝刺速度（每秒移動像素） | `600.0` |
+| `dash_duration` | 衝刺持續時間（秒） | `0.15` |
+| `dash_cooldown` | 冷卻時間（秒） | `1.0` |
+
+#### 限制
+
+- 衝刺方向僅取決於當前輸入方向，不記錄按下 `dash` 時的蓄力方向。
+- 衝刺期間不受水中阻力影響，速度為恆定值。
+- 冷卻系統依賴記憶體計時器，未持久化（遊戲重新載入後重置）。
+
 ### 設計決策
 
-<!-- 紀錄重要設計的選擇與原因 -->
+| 決策 | 原因 |
+| --- | --- |
+| 使用微分方程模擬水中移動的加減速 | 提供真實的水中阻力感，讓手感更細膩；參數 `acceleration` 與 `water_drag` 可獨立調控加速度與終端速度 |
+| 衝刺使用獨立狀態機（`is_dashing`）而非插值過渡 | 簡單明確，避免多狀態交疊造成的行為衝突；`0.15s` 時長夠短，瞬間切換不會突兀 |
+| `@export` 所有可调參數 | 方便不寫程式的情況下快速測試不同手感數值 |
+| `start_dash()` 內判斷 `direction == Vector2.ZERO` 並返回 | 避免無意間朝任意方向衝刺，提升操作明確性 |
 
 ### 測試
 
-<!-- 紀錄目前應完成的測試 -->
+- [ ] 玩家能朝八個方向移動
+- [ ] 水中加減速手感符合預期（可透過調整 `acceleration`、`water_drag` 驗證）
+- [ ] 按下 `dash` 後進入衝刺狀態，持續 `dash_duration` 後自動結束
+- [ ] 衝刺結束後進入 `dash_cooldown`，期間無法再次衝刺
+- [ ] 無輸入時（零向量）不觸發衝刺
+- [ ] 衝刺期間不受水中阻力影響，速度恆定
 
 ### 未來開發
 
-<!-- 紀錄未來可以開發的方向 -->
+- [ ] 加入視覺特效（衝刺殘影、粒子效果等）
+- [ ] 支援蓄力衝刺（按越久衝越遠）
+- [ ] 充能式冷卻改為自動恢復，而非計次冷卻
+- [ ] 添加移動音效與碰撞反饋
