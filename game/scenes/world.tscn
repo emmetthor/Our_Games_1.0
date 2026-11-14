@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://dv21rkvydwpyv" path="res://buildings/test_buildings.tscn" id="3_71j4m"]
 [ext_resource type="Script" uid="uid://cai1lixvq7c8b" path="res://scenes/build_preview.gd" id="3_k0juu"]
 [ext_resource type="Texture2D" uid="uid://cq35sb7l8awo2" path="res://assets/preview_square.png" id="5_71j4m"]
+[ext_resource type="PackedScene" uid="uid://44wdlk8stn1i" path="res://player/player.tscn" id="6_qfnet"]
+[ext_resource type="PackedScene" uid="uid://dnssdn0nhytnw" path="res://buildings/drill.tscn" id="7_i7141"]
 
 [sub_resource type="TileSet" id="TileSet_t1otr"]
 tile_size = Vector2i(32, 32)
@@ -34,3 +36,10 @@ script = ExtResource("3_k0juu")
 [node name="PreviewSquare" type="Sprite2D" parent="BuildManager/BuildPreview" unique_id=806212048]
 texture_filter = 1
 texture = ExtResource("5_71j4m")
+
+[node name="player" parent="." unique_id=1398472321 instance=ExtResource("6_qfnet")]
+
+[node name="TestBuildings" parent="." unique_id=27084834 instance=ExtResource("3_71j4m")]
+visible = false
+
+[node name="Drill" parent="." unique_id=517683503 instance=ExtResource("7_i7141")]
