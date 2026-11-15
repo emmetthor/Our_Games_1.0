@@ -1,7 +1,6 @@
 name: Godot Tests
 
 on:
-  push:
   pull_request:
   workflow_dispatch:
 
@@ -29,6 +28,23 @@ jobs:
 
       - name: Verify Godot
         run: godot --version
+
+      - name: Install GUT
+        run: |
+          curl -fsSL \
+          https://github.com/bitwes/Gut/archive/refs/tags/v9.7.1.tar.gz \
+          -o /tmp/gut.tar.gz
+
+          mkdir -p /tmp/gut-source
+
+          tar -xzf /tmp/gut.tar.gz \
+          -C /tmp/gut-source \
+          --strip-components=1
+
+          mkdir -p addons
+          cp -r /tmp/gut-source/addons/gut addons/gut
+
+          test -f addons/gut/gut_cmdln.gd
 
       - name: Import project
         run: godot --headless --path . --import
