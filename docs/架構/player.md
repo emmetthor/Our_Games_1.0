@@ -23,7 +23,7 @@
 ### 資料流
 
 ```mermaid
-flowchart LR
+flowchart TD
     physics["_physics_process(delta)"] --> get_vector["get_movement_input()"]
     get_vector --> update["update_movement(direction, delta)：先遞減冷卻"]
     update --> is_dashing{"is_dashing?"}
@@ -252,7 +252,7 @@ func start_dash(direction: Vector2) -> void:
 
 ### 測試
 
-現有 [`test_player.gd`](../../game/tests/unit/test_player.gd) 包含以下九項單元測試（此處列出涵蓋範圍，不代表本次執行結果）：
+現有 [`test_player.gd`](../../game/tests/unit/test_player.gd) 包含以下九項單元測試：
 
 | 測試函式 | 驗證內容 |
 | --- | --- |
