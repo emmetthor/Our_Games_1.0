@@ -26,6 +26,10 @@ window/stretch/aspect="expand"
 
 project/assembly_name="Our_Games_1.0"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gut/plugin.cfg")
+
 [input]
 
 build_mode={
