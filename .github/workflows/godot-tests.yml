@@ -1,0 +1,57 @@
+name: Godot Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    name: GUT Unit Tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: game
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.7.2
+          use-dotnet: false
+
+      - name: Verify Godot
+        run: godot --version
+
+      - name: Install GUT
+        run: |
+          curl -fsSL \
+          https://github.com/bitwes/Gut/archive/refs/tags/v9.7.1.tar.gz \
+          -o /tmp/gut.tar.gz
+
+          mkdir -p /tmp/gut-source
+
+          tar -xzf /tmp/gut.tar.gz \
+          -C /tmp/gut-source \
+          --strip-components=1
+
+          mkdir -p addons
+          cp -r /tmp/gut-source/addons/gut addons/gut
+
+          test -f addons/gut/gut_cmdln.gd
+
+      - name: Import project
+        run: godot --headless --path . --import
+
+      - name: Run GUT tests
+        run: |
+          godot --headless --path . \
+            -s addons/gut/gut_cmdln.gd \
+            -gdir=res://tests/unit \
+            -gexit
