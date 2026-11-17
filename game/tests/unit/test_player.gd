@@ -102,3 +102,24 @@ func test_cooldown() -> void:
     player.update_movement(Vector2.ZERO, 0.5)
 
     assert_eq(player.cooldown_timer, 0.0)
+
+# 10. Zero water_drag
+func test_zero_water_drag() -> void:
+    player.water_drag = 0.0
+    player.velocity = Vector2.ZERO
+
+    player.update_movement(Vector2.RIGHT, 0.1)
+
+    assert_almost_eq(player.velocity.x, 80.0, 0.001)
+    assert_almost_eq(player.velocity.y, 0.0, 0.001)
+
+# 11. Negative water_drag
+
+func test_negative_water_drag() -> void:
+    player.water_drag = -1.0
+    player.velocity = Vector2.ZERO
+
+    player.update_movement(Vector2.RIGHT, 0.1)
+
+    assert_almost_eq(player.velocity.x, 80.0, 0.001)
+    assert_almost_eq(player.velocity.y, 0.0, 0.001)

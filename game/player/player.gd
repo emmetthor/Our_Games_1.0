@@ -40,13 +40,19 @@ func update_movement(direction: Vector2, delta: float) -> void:
 
         if dash_timer <= 0.0:
             is_dashing = false
+        
+        return
 
-    else:
-        if get_sprint_input() and cooldown_timer <= 0.0:
-            start_dash(direction)
-        else:
-            var target_velocity := direction * acceleration / water_drag
-            velocity = target_velocity + (velocity - target_velocity) * exp(-water_drag * delta)
+    if get_sprint_input() and cooldown_timer <= 0.0:
+        start_dash(direction)
+        return
+
+    if water_drag <= 0.0:
+        velocity = velocity + direction * acceleration * delta
+        return
+
+    var target_velocity := direction * acceleration / water_drag
+    velocity = target_velocity + (velocity - target_velocity) * exp(-water_drag * delta)
 
 # collect player sprints
 func get_sprint_input() -> bool:

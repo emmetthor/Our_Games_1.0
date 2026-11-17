@@ -180,22 +180,28 @@ func update_movement(direction: Vector2, delta: float) -> void:
 
 ```gdscript
 func update_movement(direction: Vector2, delta: float) -> void:
+
     # update dash cooldown
     cooldown_timer = maxf(cooldown_timer - delta, 0.0)
 
     if is_dashing:
         dash_timer -= delta
+
         velocity = dash_direction * dash_speed
 
         if dash_timer <= 0.0:
             is_dashing = false
+        
+        return
 
-    else:
-        if get_sprint_input() and cooldown_timer <= 0.0:
-            start_dash(direction)
-        else:
-            var target_velocity := direction * acceleration / water_drag
-            velocity = target_velocity + (velocity - target_velocity) * exp(-water_drag * delta)
+    if get_sprint_input() and cooldown_timer <= 0.0:
+        start_dash(direction)
+        return
+
+    # ...（省略 water_drag <= 0.0 邏輯）...
+
+    var target_velocity := direction * acceleration / water_drag
+    velocity = target_velocity + (velocity - target_velocity) * exp(-water_drag * delta)
 ```
 
 狀態追蹤變數：
@@ -249,6 +255,7 @@ func start_dash(direction: Vector2) -> void:
 | 衝刺使用獨立狀態機（`is_dashing`）而非插值過渡 | 簡單明確，避免多狀態交疊造成的行為衝突；`0.15s` 時長夠短，瞬間切換不會突兀 |
 | `@export` 所有可調參數 | 方便不寫程式的情況下快速測試不同手感數值 |
 | `start_dash()` 內判斷 `direction == Vector2.ZERO` 並返回 | 避免無意間朝任意方向衝刺，提升操作明確性 |
+| `update_movement()` 內判斷 `water_drag <= 0.0` | 定義 `water_drag` 為零或負數情況時，統一為無水中阻力的情況 |
 
 ### 測試
 
@@ -265,13 +272,14 @@ func start_dash(direction: Vector2) -> void:
 | `test_water_drag` | 無輸入時速度依指數衰減 |
 | `test_acceleration` | 有輸入時速度依公式接近終端速度 |
 | `test_cooldown` | 冷卻計時不會小於零 |
+| `test_zero_water_drag` | `water_drag` 為零應無水中阻力 |
+| `test_negative_water_drag` | `water_drag` 為負數應無水中阻力 |
 
 待補充驗證：
 
 - [ ] 實際按鍵輸入與八方向移動
 - [ ] 水中加減速手感與碰撞行為
 - [ ] 透過輸入觸發衝刺，以及冷卻期間無法再次觸發
-- [ ] 場景覆寫的 `500.0` 衝刺速度
 
 執行方式請參考 [測試文件](../測試.md)。
 
